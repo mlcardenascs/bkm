@@ -6,6 +6,7 @@ from database.db import SessionLocal, engine
 from sqlalchemy.orm import Session
 from fastapi.params import Depends
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
 
 app = FastAPI()
 
@@ -176,4 +177,57 @@ def eliminarMateria(materiaN:str, db:Session=Depends(get_db)):
         db.commit()
         return {"Status":200}
     except:
-        return {"Status":500}        
+        return {"Status":500}
+    
+@app.get('/horaios', tags=['Horarios'])
+def getHoraios(db:Session=Depends(get_db)):
+    try:
+        horaios = db.query(models.Horario).all()
+        return horaios
+    except:
+        return {"Status":500}
+    
+@app.get('/horario', tags=['Horarios'])
+def getHorario(entry:str, db:Session=Depends(get_db)):
+    try:
+        horario = db.query(models.Horario).filter_by(grupo=entry).all()
+        return horario
+    except:
+        return {"Status":500}
+    
+@app.post('/horario', tags=['Horarios'])
+def crearHorario(entry:schemas.Horario, db:Session=Depends(get_db)):
+    try:
+        horario = models.Horario(grupo=entry.grupo, aula=entry.aula, hora=entry.hora, materia=entry.materia, profesor=entry.profesor)
+        db.add(horario)
+        db.commit()
+        db.refresh(horario)
+        return horario
+    except:
+        return {"Status":500}
+        
+@app.put('/horaio', tags=['Horarios'])
+def actualizarHorario(grp:str,mtr:str, entry:schemas.Horario, db:Session=Depends(get_db)):
+    try:
+        horario = db.query(models.Horario).filter_by(grupo=grp, materia=mtr).first()
+        horario.grupo = entry.grupo
+        horario.aula = entry.aula
+        horario.hora = entry.hora
+        horario.materia = entry.materia
+        horario.profesor = entry.profesor
+        db.commit()
+        db.refresh(horario)
+        return horario
+    except:
+        return {"Status":500}
+    
+@app.delete('/horario', tags=['Horarios'])
+def eliminarHorario(grp:str, db:Session=Depends(get_db)):
+    try:
+        sqlstm = text("delete from horario where grupo = '"+grp+"'")
+        db.execute(sqlstm)
+        db.commit()
+        return {"Status":200}
+    except:
+        return {"Status":500}
+

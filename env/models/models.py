@@ -21,4 +21,13 @@ class Materia(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     materia = Column(String(50), nullable=False)
     carrera = Column(String(50), nullable=False)
+
+class Horario(Base):
+    __tablename__ = 'horario'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    grupo = Column(String(20), nullable= False)
+    aula = Column(String(10), nullable=False)
+    hora = Column(String(10), nullable=False)
+    materia = Column(String(50), nullable=False)
+    profesor = Column(String(50), nullable=False)
     
