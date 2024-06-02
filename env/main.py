@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 import models.models as models
 import schemas.schemas as schemas
-from database.db import SessionLocal, engine
+from database.db import SessionLocal
 from sqlalchemy.orm import Session
 from fastapi.params import Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -231,3 +231,72 @@ def eliminarHorario(grp:str, db:Session=Depends(get_db)):
     except:
         return {"Status":500}
 
+
+@app.get('/usuarios', tags=['Usuarios'])
+def getUsuarios(db:Session=Depends(get_db)):
+    try:
+        usuarios = db.query(models.Usuario).all()
+        return usuarios
+    except:
+        return {"Status":500}
+    
+@app.get('/usuario', tags=['Usuarios'])
+def getUsuario(entry:str, db:Session=Depends(get_db)):
+    try:
+        usuario = db.query(models.Usuario).filter_by(correo=entry).first()
+        if usuario == None:
+            return {"Status":500}
+        return usuario
+    except:
+        return {"Status": 500}
+    
+@app.post('/usuario', tags=['Usuarios'])
+def crearUsuario(entry:schemas.Usuario, db:Session=Depends(get_db)):
+    try:
+        usuario = models.Usuario(nombre=entry.nombre, apellido=entry.apellido, correo=entry.correo, pwd = entry.pwd, tipo_usuario=entry.tipo_usuario)
+        db.add(usuario)
+        db.commit()
+        db.refresh(usuario)
+        return usuario
+    except:
+        return {"Status":500}
+
+@app.put('/usuario', tags=['Usuarios'])
+def actualizarUsuario(entry:schemas.Usuario, mail:str, db:Session=Depends(get_db)):
+    try:
+        usuario = db.query(models.Usuario).filter_by(correo=mail).first()
+        usuario.nombre = entry.nombre
+        usuario.apellido = entry.apellido
+        usuario.correo = entry.correo
+        usuario.pwd = entry.pwd
+        usuario.tipo_usuario = entry.tipo_usuario
+        db.commit()
+        db.refresh(usuario)
+        return usuario
+    except:
+        return {"Status":500}
+        
+@app.delete('/usuario', tags=['Usuarios'])
+def eleiminarUsuario(mail:str, db:Session=Depends(get_db)):
+    try:
+        usuario = db.query(models.Usuario).filter_by(correo=mail).first()
+        db.delete(usuario)
+        db.commit()
+        return {"Status":200}
+    except:
+        return {"Status":500}
+    
+@app.get('/usuaio/login', tags=['Usuario'], response_model=schemas.UserLogin)
+def login(mail:str, contra:str, db:Session=Depends(get_db)):
+    try:
+        usuario = db.query(models.Usuario).filter_by(correo=mail).first()
+        if(usuario == None):
+            return {"Status":404}
+        elif usuario.pwd == contra:
+            usrlg = schemas.UserLogin
+            usrlg = usuario
+            return usrlg
+        return{"Status":404}
+    except:
+        return {"Status":500}
+        

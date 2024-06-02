@@ -31,3 +31,11 @@ class Horario(Base):
     materia = Column(String(50), nullable=False)
     profesor = Column(String(50), nullable=False)
     
+class Usuario(Base):
+    __tablename__ = 'usuario'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    nombre = Column(String(45), nullable=False)
+    apellido = Column(String(45), nullable=False)
+    correo = Column(String(45), nullable=False)
+    pwd = Column(String(45), nullable=False)
+    tipo_usuario = Column(String(45), nullable=False)

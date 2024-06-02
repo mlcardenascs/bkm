@@ -38,3 +38,23 @@ class Horario(BaseModel):
     
     class config():
         from_attributes = True
+
+class Usuario(BaseModel):
+    id:Optional[int] = None
+    nombre:str
+    apellido:str
+    correo:str
+    pwd:str
+    tipo_usuario:str
+    
+    class config():
+        from_attributes = True
+        
+class UserLogin(BaseModel):
+    nombre:str
+    apellido:str
+    correo:str
+    tipo_usuario:str
+    
+    class config():
+        from_attributes = True
