@@ -32,7 +32,8 @@ class Horario(BaseModel):
     id:Optional[int] = None
     grupo:str
     aula:str
-    hora:str
+    hora_inicio:str
+    hora_fin:str
     materia:str
     profesor:str
     semana:str
