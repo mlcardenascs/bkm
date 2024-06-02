@@ -198,7 +198,7 @@ def getHorario(entry:str, db:Session=Depends(get_db)):
 @app.post('/horario', tags=['Horarios'])
 def crearHorario(entry:schemas.Horario, db:Session=Depends(get_db)):
     try:
-        horario = models.Horario(grupo=entry.grupo, aula=entry.aula, hora=entry.hora, materia=entry.materia, profesor=entry.profesor)
+        horario = models.Horario(grupo=entry.grupo, aula=entry.aula, hora=entry.hora, materia=entry.materia, profesor=entry.profesor, semana=entry.semana, dias=entry.dias)
         db.add(horario)
         db.commit()
         db.refresh(horario)
@@ -215,6 +215,8 @@ def actualizarHorario(grp:str,mtr:str, entry:schemas.Horario, db:Session=Depends
         horario.hora = entry.hora
         horario.materia = entry.materia
         horario.profesor = entry.profesor
+        horario.semana = entry.semana
+        horario.dias = entry.dias
         db.commit()
         db.refresh(horario)
         return horario

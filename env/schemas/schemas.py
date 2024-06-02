@@ -35,7 +35,9 @@ class Horario(BaseModel):
     hora:str
     materia:str
     profesor:str
-    
+    semana:str
+    dias:str
+        
     class config():
         from_attributes = True
 

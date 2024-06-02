@@ -30,6 +30,8 @@ class Horario(Base):
     hora = Column(String(10), nullable=False)
     materia = Column(String(50), nullable=False)
     profesor = Column(String(50), nullable=False)
+    semana = Column(String(50), nullable=False)
+    dias = Column(String(20), nullable=False)
     
 class Usuario(Base):
     __tablename__ = 'usuario'
