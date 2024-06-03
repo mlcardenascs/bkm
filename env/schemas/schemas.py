@@ -6,6 +6,7 @@ class Grupo(BaseModel):
     grupo:str
     aula:str
     edificio:str
+    carrera:str
     
     class Config():
         from_attributes = True

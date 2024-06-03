@@ -48,7 +48,7 @@ def getGrupo(grupo:str, db:Session=Depends(get_db)):
 @app.post('/grupos', tags=['Grupos'])
 def crearGrupo(entry:schemas.Grupo, db:Session=Depends(get_db)):
     try:
-        grupo = models.Grupo(grupo=entry.grupo, aula=entry.aula, edificio=entry.edificio)
+        grupo = models.Grupo(grupo=entry.grupo, aula=entry.aula, edificio=entry.edificio, carrera=entry.carrera)
         db.add(grupo)
         db.commit()
         db.refresh(grupo)
@@ -63,6 +63,7 @@ def ectualizarGrupo(grp:str, entry:schemas.Grupo, db:Session=Depends(get_db)):
         grupo.grupo = entry.grupo
         grupo.aula = entry.aula
         grupo.edificio = entry.edificio
+        grupo.carrera = entry.carrera
         db.commit()
         db.refresh(grupo)
         return grupo

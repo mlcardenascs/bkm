@@ -4,9 +4,10 @@ from database.db import Base
 class Grupo(Base):
     __tablename__ = 'grado'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    grupo = Column(String(3), nullable=False)
-    aula = Column(String(3), nullable=False)
+    grupo = Column(String(25), nullable=False)
+    aula = Column(String(10), nullable=False)
     edificio = Column(String(4), nullable=False)
+    carrera = Column(String(45), nullable=False)
 
 class Profesor(Base):
     __tablename__ = 'profesor'
