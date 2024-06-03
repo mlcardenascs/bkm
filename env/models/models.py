@@ -33,7 +33,8 @@ class Horario(Base):
     materia = Column(String(50), nullable=False)
     profesor = Column(String(50), nullable=False)
     semana = Column(String(50), nullable=False)
-    dias = Column(String(20), nullable=False)
+    hora = Column(String(45), nullable=False)
+    carrera = Column(String(50), nullable=False)
     
 class Usuario(Base):
     __tablename__ = 'usuario'
@@ -43,3 +44,18 @@ class Usuario(Base):
     correo = Column(String(45), nullable=False)
     pwd = Column(String(45), nullable=False)
     tipo_usuario = Column(String(45), nullable=False)
+    
+class Asistencia(Base):
+    __tablename__ = 'asistencias'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    grupo = Column(String(45), nullable=False)
+    hora = Column(String(45), nullable=False)
+    materia = Column(String(45), nullable=False)
+    profesor = Column(String(45), nullable=False)
+    Lun = Column(String(15), nullable=False)
+    Mar = Column(String(15), nullable=False)
+    Mier = Column(String(15), nullable=False)
+    Jue = Column(String(15), nullable=False)
+    Vier = Column(String(15), nullable=False)
+    semana = Column(String(45), nullable=False)
+    carrera = Column(String(45), nullable=False)

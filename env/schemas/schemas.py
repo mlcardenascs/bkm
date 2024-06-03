@@ -38,7 +38,8 @@ class Horario(BaseModel):
     materia:str
     profesor:str
     semana:str
-    dias:str
+    hora:str
+    carrera:str
         
     class config():
         from_attributes = True
@@ -62,3 +63,17 @@ class UserLogin(BaseModel):
     
     class config():
         from_attributes = True
+        
+class Asistencia(BaseModel):
+    id:Optional[int] = None
+    grupo:str
+    hora:str
+    materia:str
+    profesor:str
+    Lun:str
+    Mar:str
+    Mier:str
+    Jue:str
+    Vier:str
+    semana:str
+    carrera:str
