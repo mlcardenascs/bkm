@@ -64,7 +64,7 @@ class UserLogin(BaseModel):
     class config():
         from_attributes = True
         
-class Asistencia(BaseModel):
+class AsistenciaAlumno(BaseModel):
     id:Optional[int] = None
     grupo:str
     hora:str
@@ -77,3 +77,23 @@ class Asistencia(BaseModel):
     Vier:str
     semana:str
     carrera:str
+    
+    class config():
+        from_attributes = True
+
+class AsistenciaProfe(BaseModel):
+    id:Optional[int] = None
+    grupo:str
+    hora:str
+    materia:str
+    profesor:str
+    Lun:str
+    Mar:str
+    Mier:str
+    Jue:str
+    Vier:str
+    semana:str
+    carrera:str
+    
+    class config():
+        from_attributes = True

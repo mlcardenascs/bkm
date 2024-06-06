@@ -45,8 +45,23 @@ class Usuario(Base):
     pwd = Column(String(45), nullable=False)
     tipo_usuario = Column(String(45), nullable=False)
     
-class Asistencia(Base):
-    __tablename__ = 'asistencias'
+class AsistenciaAlumnos(Base):
+    __tablename__ = 'asistencias_alumnos'
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    grupo = Column(String(45), nullable=False)
+    hora = Column(String(45), nullable=False)
+    materia = Column(String(45), nullable=False)
+    profesor = Column(String(45), nullable=False)
+    Lun = Column(String(15), nullable=False)
+    Mar = Column(String(15), nullable=False)
+    Mier = Column(String(15), nullable=False)
+    Jue = Column(String(15), nullable=False)
+    Vier = Column(String(15), nullable=False)
+    semana = Column(String(45), nullable=False)
+    carrera = Column(String(45), nullable=False)
+
+class AsistenciaProfe(Base):
+    __tablename__ = 'asistencias_profes'
     id = Column(Integer, primary_key=True, autoincrement=True)
     grupo = Column(String(45), nullable=False)
     hora = Column(String(45), nullable=False)

@@ -308,7 +308,7 @@ def login(mail:str, contra:str, db:Session=Depends(get_db)):
 @app.get('/asistencia', tags=['Asistencias'])
 def getAsistencias(db:Session=Depends(get_db)):
     try:
-        asistencias = db.query(models.Asistencia).all()
+        asistencias = db.query(models.AsistenciaAlumnos).all()
         return asistencias
     except:
         return {"Statua":500}
@@ -316,7 +316,7 @@ def getAsistencias(db:Session=Depends(get_db)):
 @app.get('/asiatencia', tags=['Asistencias'])
 def getAsistencia(grp:str, carrera:str, db:Session=Depends(get_db)):
     try:
-        asistencia = db.query(models.Asistencia).filter_by(grupo=grp, carrera=carrera).first()
+        asistencia = db.query(models.AsistenciaAlumnos).filter_by(grupo=grp, carrera=carrera).first()
         return asistencia
     except:
         return {"Status":500}
@@ -324,15 +324,15 @@ def getAsistencia(grp:str, carrera:str, db:Session=Depends(get_db)):
 @app.get('/Tasiatencia', tags=['Asistencias'])
 def getAsistencia(grp:str, carrera:str, db:Session=Depends(get_db)):
     try:
-        asistencia = db.query(models.Asistencia).filter_by(grupo=grp, carrera=carrera).all()
+        asistencia = db.query(models.AsistenciaAlumnos).filter_by(grupo=grp, carrera=carrera).all()
         return asistencia
     except:
         return {"Status":500}
 
 @app.post('/asistencia', tags=['Asistencias'])
-def crearAsistencia(entry:schemas.Asistencia, db:Session=Depends(get_db)):
+def crearAsistencia(entry:schemas.AsistenciaAlumno, db:Session=Depends(get_db)):
     try:
-        asistencia = models.Asistencia(grupo=entry.grupo, hora=entry.hora, materia=entry.materia, profesor=entry.profesor, Lun=entry.Lun, Mar=entry.Mar, Mier=entry.Mier, Jue=entry.Jue, Vier=entry.Vier, semana=entry.semana, carrera=entry.carrera)
+        asistencia = models.AsistenciaAlumnos(grupo=entry.grupo, hora=entry.hora, materia=entry.materia, profesor=entry.profesor, Lun=entry.Lun, Mar=entry.Mar, Mier=entry.Mier, Jue=entry.Jue, Vier=entry.Vier, semana=entry.semana, carrera=entry.carrera)
         db.add(asistencia)
         db.commit()
         db.refresh(asistencia)
@@ -341,9 +341,9 @@ def crearAsistencia(entry:schemas.Asistencia, db:Session=Depends(get_db)):
         return {"Status":500}
 
 @app.put('/asietencia', tags=['Asistencias'])
-def actualizarAsistencia(hrs:str, mtr:str, entry:schemas.Asistencia, db:Session=Depends(get_db)):
+def actualizarAsistencia(hrs:str, mtr:str, entry:schemas.AsistenciaAlumno, db:Session=Depends(get_db)):
     try:
-        asistencia = db.query(models.Asistencia).filter_by(hora=hrs, materia=mtr).first()
+        asistencia = db.query(models.AsistenciaAlumnos).filter_by(hora=hrs, materia=mtr).first()
         asistencia.grupo = entry.grupo
         asistencia.hora = entry.hora
         asistencia.materia = entry.materia
@@ -363,7 +363,72 @@ def actualizarAsistencia(hrs:str, mtr:str, entry:schemas.Asistencia, db:Session=
 @app.delete('/asistencia', tags=['Asistencias'])
 def eliminarAsistencia(grupo:str, materia:str, db:Session=Depends(get_db)):
     try:
-        asistencia = db.query(models.Asistencia).filter_by(grupo=grupo, materia=materia).first()
+        asistencia = db.query(models.AsistenciaAlumnos).filter_by(grupo=grupo, materia=materia).first()
+        db.delete(asistencia)
+        db.commit()
+        return {"Status":200}
+    except:
+        return {"Status":500}
+
+@app.get('/asistenciasprofe', tags=['AsistenciasProfe'])
+def getAsistenciasProfe(db:Session=Depends(get_db)):
+    try:
+        asistencias = db.query(models.AsistenciaProfe).all()
+        return asistencias
+    except:
+        return {"Statua":500}
+    
+@app.get('/asistenciaprofe', tags=['AsistenciasProfe'])
+def getAsistenciaProfe(grp:str, carrera:str, db:Session=Depends(get_db)):
+    try:
+        asistencia = db.query(models.AsistenciaProfe).filter_by(grupo=grp, carrera=carrera).first()
+        return asistencia
+    except:
+        return {"Status":500}
+    
+@app.get('/Tasistenciaprofe', tags=['AsistenciasProfe'])
+def getAsistenciaProfe(grp:str, carrera:str, db:Session=Depends(get_db)):
+    try:
+        asistencia = db.query(models.AsistenciaProfe).filter_by(grupo=grp, carrera=carrera).all()
+        return asistencia
+    except:
+        return {"Status":500}
+
+@app.post('/asistenciaprofe', tags=['AsistenciasProfe'])
+def crearAsistenciaProfe(entry:schemas.AsistenciaProfe, db:Session=Depends(get_db)):
+    try:
+        asistencia = models.AsistenciaProfe(grupo=entry.grupo, hora=entry.hora, materia=entry.materia, profesor=entry.profesor, Lun=entry.Lun, Mar=entry.Mar, Mier=entry.Mier, Jue=entry.Jue, Vier=entry.Vier, semana=entry.semana, carrera=entry.carrera)
+        db.add(asistencia)
+        db.commit()
+        db.refresh(asistencia)
+        return asistencia
+    except:
+        return {"Status":500}
+
+@app.put('/asistenciaprofe', tags=['AsistenciasProfe'])
+def actualizarAsistenciaProfe(hrs:str, mtr:str, entry:schemas.AsistenciaProfe, db:Session=Depends(get_db)):
+    try:
+        asistencia = db.query(models.AsistenciaProfe).filter_by(hora=hrs, materia=mtr).first()
+        asistencia.grupo = entry.grupo
+        asistencia.hora = entry.hora
+        asistencia.materia = entry.materia
+        asistencia.profesor = entry.profesor
+        asistencia.Lun = entry.Lun  
+        asistencia.Mar = entry.Mar
+        asistencia.Mier = entry.Mier
+        asistencia.Jue = entry.Jue
+        asistencia.Vier = entry.Vier
+        asistencia.carrera = entry.carrera
+        db.commit()
+        db.refresh(asistencia)
+        return asistencia
+    except:
+        return {"Status":500}
+    
+@app.delete('/asistenciaprofe', tags=['AsistenciasProfe'])
+def eliminarAsistenciaProfe(grupo:str, materia:str, db:Session=Depends(get_db)):
+    try:
+        asistencia = db.query(models.AsistenciaProfe).filter_by(grupo=grupo, materia=materia).first()
         db.delete(asistencia)
         db.commit()
         return {"Status":200}
